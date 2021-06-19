@@ -12,7 +12,7 @@ class SnakeGame:
 
     def __init__ (self):
         self.snake = SnakeObject((0,-1), (0,0))
-        self.direction = (0,1)
+        self.direction = (0,0)
         self.board = [
                     [self.snake,'--','--', '--', '--', '--','--','--', '--', '--'],
                     ['--','--','--', '--', '--', '--','--','--', '--', '--'],
@@ -34,6 +34,7 @@ class SnakeGame:
 
     def changeDirection(self, direction):
         self.direction = direction
+        self.display()
 
     def moveSnake(self, snake, current):
         if current[0] < 0 or current[1] < 0:
