@@ -34,7 +34,6 @@ class SnakeGame:
 
     def changeDirection(self, direction):
         self.direction = direction
-        self.display()
 
     def moveSnake(self, snake, current):
         if current[0] < 0 or current[1] < 0:
@@ -51,16 +50,6 @@ class SnakeGame:
                     newSnake.previousNode = snake
                     self.snake = newSnake
                     self.body.insert(0, newSnake)
-                    # while snake.previousNode != None:
-                    #     snakeNext = snake.previousNode
-                    #     snakeNext.previousSq = snakeNext.currentSq 
-                    #     snakeNext.currentSq = snake.currentSq
-                        
-                    #     snake.previousSq = snake.currentSq
-                    #     snake = snake.previousNode
-                    # self.snake.currentSq = current
-                    # snake.previousNode = SnakeObject(None, snake.previousSq)
-                    # self.body.append(snake.previousNode)
             else: # (new square is '--')
                 snake.previousSq = snake.currentSq
                 snake.currentSq = current
@@ -83,26 +72,3 @@ class SnakeGame:
         """Displays the board"""
         for space in self.board:
             print(space)
-
-
-
-gs = SnakeGame()
-gs.display()
-
-gs.autoMove()
-gs.display()
-gs.autoMove()
-gs.display()
-gs.changeDirection((1,0))
-gs.autoMove()
-gs.display()
-gs.changeDirection((-1,0))
-
-gs.autoMove()
-gs.display()
-gs.autoMove()
-gs.display()
-gs.autoMove()
-gs.display()
-gs.autoMove()
-gs.display()

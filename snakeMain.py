@@ -15,36 +15,54 @@ def main():
     screen.fill(p.Color("black"))
     running = True
     gs = snakeEngine.SnakeGame()
+    MOVEEVENT, t, mdir = p.USEREVENT+1, 250, gs.direction
+    p.time.set_timer(MOVEEVENT, t)
+    
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_DOWN:
-                    gs.changeDirection((1,0))
-                    gs.autoMove()
+                    if gs.direction != (-1,0):
+                        gs.changeDirection((1,0))
+                        gs.display()
                 if e.key == p.K_RIGHT:
-                    gs.changeDirection((0,1))
-                    gs.autoMove()
+                    if gs.direction != (0,-1):
+                        gs.changeDirection((0,1))
+                        gs.display()
+                if e.key == p.K_LEFT:
+                    if gs.direction != (0,1):
+                        gs.changeDirection((0,-1))
+                        gs.display()
+                if e.key == p.K_UP:
+                    if gs.direction != (1,0):
+                        gs.changeDirection((-1,0))
+                        gs.display()
+            elif e.type == MOVEEVENT:
+                gs.autoMove()
 
         drawGameState(screen, gs.board, gs.body)
         p.display.flip()
 
 def drawGameState(screen, board, body):
     drawGrid(screen)
-    drawBody(screen, board, body)
+    drawBody(screen, body)
 
 def drawGrid(screen):
+    global colors
+    colors = [p.Color("#a7d470"), p.Color("#92cc4b")]
+    
     for i in range(10):
         for j in range(10):
-            p.draw.rect(screen, "green", p.Rect((j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)), width = 1)
+            color = colors[((i+j) % 2)]
+            p.draw.rect(screen, color, p.Rect((j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)))
 
-def drawBody(screen, board, body):
-    for row in range(10):
-        for col in range(10):
-            piece = board[row][col]
-            if piece != '--':
-                p.draw.rect(screen, "light green", p.Rect((col*(SQ_SIZE), row*(SQ_SIZE), SQ_SIZE, SQ_SIZE)))
-    
+def drawBody(screen, body):
+    for piece in body:
+        p.draw.rect(screen, "#476ac4", p.Rect((piece.currentSq[1]*(SQ_SIZE), piece.currentSq[0]*(SQ_SIZE), SQ_SIZE, SQ_SIZE)))
+        if piece.previousNode is None:
+            p.draw.rect(screen, colors[(piece.previousSq[1]+piece.previousSq[0]) % 2], p.Rect((piece.previousSq[1]*(SQ_SIZE), piece.previousSq[0]*(SQ_SIZE), SQ_SIZE, SQ_SIZE)))
+
 if __name__ == "__main__":
     main()
