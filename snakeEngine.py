@@ -68,6 +68,9 @@ class SnakeGame:
                     self.board[i.currentSq[0]][i.currentSq[1]] = i
                     self.board[i.previousSq[0]][i.previousSq[1]] = '--'
 
+    def randomFood(self):
+        pass
+    
     def display(self):
         """Displays the board"""
         for space in self.board:
