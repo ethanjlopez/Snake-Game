@@ -1,3 +1,4 @@
+import random
 class SnakeObject: 
 
     def __init__(self, previousSq, currentSq):
@@ -11,12 +12,12 @@ class SnakeObject:
 class SnakeGame:
 
     def __init__ (self):
-        self.snake = SnakeObject((0,-1), (0,0))
+        self.snake = SnakeObject((0,-2), (0,0))
         self.direction = (0,0)
         self.board = [
                     [self.snake,'--','--', '--', '--', '--','--','--', '--', '--'],
                     ['--','--','--', '--', '--', '--','--','--', '--', '--'],
-                    ['--','--','--', '--', '--', '--','--','--', '--', '--'],
+                    ['--','--','--', '--', 'O', '--','--','--', '--', '--'],
                     ['--','--','--', '--', '--', '--','--','--', '--', '--'],
                     ['--','--','--', '--', '--', '--','--','--', '--', '--'],
                     ['--','--','--', '--', '--', '--','--','--', '--', '--'],
@@ -50,6 +51,7 @@ class SnakeGame:
                     newSnake.previousNode = snake
                     self.snake = newSnake
                     self.body.insert(0, newSnake)
+                self.randomFood()
             else: # (new square is '--')
                 snake.previousSq = snake.currentSq
                 snake.currentSq = current
@@ -68,10 +70,23 @@ class SnakeGame:
                     self.board[i.currentSq[0]][i.currentSq[1]] = i
                     self.board[i.previousSq[0]][i.previousSq[1]] = '--'
 
+
+    def getOpenBoard(self, board):
+        openList = []
+        for i in range(10):
+            for r in range(10):
+                if board[r][i] == '--':
+                    openList.append((r,i))
+        return openList
+
     def randomFood(self):
-        pass
-    
+        openList = self.getOpenBoard(self.board)
+        randomNum = random.randint(0,len(openList))
+        coord = openList[randomNum]
+        self.board[coord[0]][coord[1]] = 'O'
+
     def display(self):
         """Displays the board"""
         for space in self.board:
             print(space)
+

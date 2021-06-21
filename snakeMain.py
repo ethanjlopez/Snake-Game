@@ -15,8 +15,9 @@ def main():
     screen.fill(p.Color("black"))
     running = True
     gs = snakeEngine.SnakeGame()
-    MOVEEVENT, t, mdir = p.USEREVENT+1, 250, gs.direction
+    MOVEEVENT, t = p.USEREVENT+1, 250
     p.time.set_timer(MOVEEVENT, t)
+
     
     while running:
         for e in p.event.get():
@@ -46,17 +47,20 @@ def main():
         p.display.flip()
 
 def drawGameState(screen, board, body):
-    drawGrid(screen)
+    drawGrid(screen, board)
     drawBody(screen, body)
 
-def drawGrid(screen):
+def drawGrid(screen, board):
     global colors
     colors = [p.Color("#a7d470"), p.Color("#92cc4b")]
     
     for i in range(10):
         for j in range(10):
             color = colors[((i+j) % 2)]
-            p.draw.rect(screen, color, p.Rect((j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)))
+            if board[i][j] == 'O':
+                p.draw.rect(screen, 'white', p.Rect((j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)))
+            else:
+                p.draw.rect(screen, color, p.Rect((j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)))
 
 def drawBody(screen, body):
     for piece in body:
