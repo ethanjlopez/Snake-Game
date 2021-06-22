@@ -15,15 +15,17 @@ def main():
     screen.fill(p.Color("black"))
     running = True
     gs = snakeEngine.SnakeGame()
-    MOVEEVENT, t = p.USEREVENT+1, 250
-    p.time.set_timer(MOVEEVENT, t)
-
-    
+    MOVEEVENT, t = p.USEREVENT+1, 150
+    gs.randomFood()    
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.KEYDOWN:
+                p.time.set_timer(MOVEEVENT, t)
+                if e.key == p.K_r:
+                    gs = snakeEngine.SnakeGame()
+                    gs.randomFood()
                 if e.key == p.K_DOWN:
                     if gs.direction != (-1,0):
                         gs.changeDirection((1,0))
@@ -42,7 +44,6 @@ def main():
                         gs.display()
             elif e.type == MOVEEVENT:
                 gs.autoMove()
-
         drawGameState(screen, gs.board, gs.body)
         p.display.flip()
 
@@ -59,7 +60,7 @@ def drawGrid(screen, board):
             color = colors[((i+j) % 2)]
             if board[i][j] == 'O':
                 p.draw.rect(screen, 'white', p.Rect((j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)))
-            else:
+            elif board[i][j] =='--':
                 p.draw.rect(screen, color, p.Rect((j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)))
 
 def drawBody(screen, body):
