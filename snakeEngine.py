@@ -12,7 +12,7 @@ class SnakeObject:
 class SnakeGame:
 
     def __init__ (self):
-        self.snake = SnakeObject((0,-2), (0,0))
+        self.snake = SnakeObject((0,-1), (0,0))
         self.direction = (0,0)
         self.board = [
                     [self.snake,'--','--', '--', '--', '--','--','--', '--', '--'],
@@ -27,19 +27,26 @@ class SnakeGame:
                     ['--','--','--', '--', '--', '--','--','--', '--', '--']
                     ]
         self.body = [self.snake]
+        self.gameState = True
 
     def autoMove(self):
-        snake = self.snake
-        r, c = snake.currentSq[0] + self.direction[0], snake.currentSq[1] + self.direction[1]
-        self.moveSnake(snake, (r,c))
+        if self.gameState == True:
+            snake = self.snake
+            r, c = snake.currentSq[0] + self.direction[0], snake.currentSq[1] + self.direction[1]
+            self.moveSnake(snake, (r,c))
 
     def changeDirection(self, direction):
         self.direction = direction
 
     def moveSnake(self, snake, current):
-        if current[0] < 0 or current[1] < 0:
-            print( "Hit Outside Box" )
+        openBody = self.getSnakeBody(self.body)
+        if current in openBody:
+            self.gameOver()
         else:
+            if current[0] > 9 or current[0] < 0:
+                return self.gameOver()
+            if current[1] > 9 or current[1] < 0:
+                return self.gameOver()
             if self.board[current[0]][current[1]] == 'O':
                 if snake.previousNode is None:
                     snake.previousNode = SnakeObject(snake.previousSq, snake.currentSq)
@@ -78,12 +85,21 @@ class SnakeGame:
                 if board[r][i] == '--':
                     openList.append((r,i))
         return openList
+    
+    def getSnakeBody(self, body):
+        openBody = []
+        for i in body:
+            openBody.append((i.currentSq[0], i.currentSq[1]))
+        return openBody
 
     def randomFood(self):
         openList = self.getOpenBoard(self.board)
-        randomNum = random.randint(0,len(openList))
+        randomNum = random.randint(0,len(openList)-1)
         coord = openList[randomNum]
         self.board[coord[0]][coord[1]] = 'O'
+
+    def gameOver(self):
+        self.gameState = False
 
     def display(self):
         """Displays the board"""

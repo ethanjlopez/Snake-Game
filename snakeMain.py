@@ -1,3 +1,5 @@
+# NTD: GAME OVER Screen, Point System, Replay Text
+
 import pygame as p
 import snakeEngine 
 
@@ -25,6 +27,7 @@ def main():
                 if e.key == p.K_r:
                     gs = snakeEngine.SnakeGame()
                     gs.randomFood()
+                    MOVEEVENT +=1
                 if e.key == p.K_DOWN:
                     if gs.direction != (-1,0):
                         gs.changeDirection((1,0))
